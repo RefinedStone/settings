@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.18"
+    id("org.springframework.boot") version "3.3.0"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
     kotlin("jvm") version "1.8.0"
     kotlin("plugin.spring") version "1.8.0"
@@ -25,7 +25,7 @@ dependencies {
     // just add these dependencies for use kotlin-jdsl
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     val jdslVersion = "2.2.1.RELEASE"
-    implementation("com.linecorp.kotlin-jdsl:spring-data-kotlin-jdsl-starter:$jdslVersion")
+    implementation("com.linecorp.kotlin-jdsl:spring-data-kotlin-jdsl-starter-jakarta:$jdslVersion")
 
     // coroutine
     val coroutineVersion = "1.6.4"
@@ -35,8 +35,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$coroutineVersion")
 
     // reactive
-    implementation("com.linecorp.kotlin-jdsl:spring-data-kotlin-jdsl-hibernate-reactive:$jdslVersion")
-    implementation("org.hibernate.reactive:hibernate-reactive-core:1.1.9.Final")
+    implementation("com.linecorp.kotlin-jdsl:spring-data-kotlin-jdsl-hibernate-reactive-jakarta:$jdslVersion")
+    implementation("org.hibernate.reactive:hibernate-reactive-core:2.3.0.Final")
     implementation("io.smallrye.reactive:mutiny-kotlin:2.2.0")
 
     // h2 db reactive

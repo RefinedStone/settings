@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
-import javax.persistence.EntityManager
+import jakarta.persistence.EntityManager
 
 @RestController
 @RequestMapping("/api/v1/books")
