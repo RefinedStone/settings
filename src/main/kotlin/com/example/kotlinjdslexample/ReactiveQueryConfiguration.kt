@@ -2,17 +2,17 @@ package com.example.kotlinjdslexample
 
 import com.example.kotlinjdslexample.h2db.H2ConnectionPool
 import com.example.kotlinjdslexample.h2db.VertxH2DBConnectionPoolConfiguration
-import com.linecorp.kotlinjdsl.query.creator.SubqueryCreator
-import com.linecorp.kotlinjdsl.spring.data.reactive.query.SpringDataHibernateMutinyReactiveQueryFactory
+//import com.linecorp.kotlinjdsl.query.creator.SubqueryCreator
+//import com.linecorp.kotlinjdsl.spring.data.reactive.query.SpringDataHibernateMutinyReactiveQueryFactory
 import com.zaxxer.hikari.HikariDataSource
+import jakarta.persistence.spi.PersistenceUnitInfo
 import org.hibernate.reactive.mutiny.Mutiny
 import org.hibernate.reactive.provider.ReactivePersistenceProvider
 import org.hibernate.reactive.provider.Settings
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
-import java.util.*
-import jakarta.persistence.spi.PersistenceUnitInfo
+import java.util.Properties
 
 @Configuration
 class ReactiveQueryConfiguration {
@@ -20,7 +20,7 @@ class ReactiveQueryConfiguration {
     fun mutinySessionFactory(localSessionFactoryBean: LocalContainerEntityManagerFactoryBean): Mutiny.SessionFactory {
         val reactivePersistenceInfo = ReactivePersistenceInfo(
             localSessionFactoryBean.persistenceUnitInfo!!,
-            localSessionFactoryBean.jpaPropertyMap
+            localSessionFactoryBean.jpaPropertyMap,
         )
         return ReactivePersistenceProvider()
             .createContainerEntityManagerFactory(reactivePersistenceInfo, reactivePersistenceInfo.properties)
@@ -34,9 +34,9 @@ class ReactiveQueryConfiguration {
             putAll(jpaPropertyMap)
             setProperty(Settings.SQL_CLIENT_POOL, H2ConnectionPool::class.qualifiedName)
             setProperty(Settings.SQL_CLIENT_POOL_CONFIG, VertxH2DBConnectionPoolConfiguration::class.qualifiedName)
-            setProperty(Settings.URL, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).jdbcUrl)
-            setProperty(Settings.USER, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).username)
-            setProperty(Settings.PASS, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).password)
+            setProperty(Settings.JAKARTA_JDBC_URL, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).jdbcUrl)
+            setProperty(Settings.JAKARTA_JDBC_USER, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).username)
+            setProperty(Settings.JAKARTA_JDBC_PASSWORD, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).password)
             setProperty(Settings.HBM2DDL_AUTO, "none")
         }
 
@@ -45,14 +45,14 @@ class ReactiveQueryConfiguration {
         override fun getPersistenceProviderClassName(): String = ReactivePersistenceProvider::class.qualifiedName!!
     }
 
-    @Bean
-    fun queryFactory(
-        sessionFactory: Mutiny.SessionFactory,
-        subqueryCreator: SubqueryCreator
-    ): SpringDataHibernateMutinyReactiveQueryFactory {
-        return SpringDataHibernateMutinyReactiveQueryFactory(
-            sessionFactory = sessionFactory,
-            subqueryCreator = subqueryCreator
-        )
-    }
+//    @Bean
+//    fun queryFactory(
+//        sessionFactory: Mutiny.SessionFactory,
+//        subqueryCreator: SubqueryCreator,
+//    ): SpringDataHibernateMutinyReactiveQueryFactory {
+//        return SpringDataHibernateMutinyReactiveQueryFactory(
+//            sessionFactory = sessionFactory,
+//            subqueryCreator = subqueryCreator,
+//        )
+//    }
 }
