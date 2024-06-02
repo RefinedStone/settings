@@ -31,7 +31,6 @@ class ReactiveBookController(
     @PostMapping
     suspend fun createBook(@RequestBody spec: CreateBookSpec): ResponseEntity<Long> {
         val book = bookService.create(spec)
-
         return ResponseEntity.ok(book.id)
     }
 
@@ -86,15 +85,15 @@ class ReactiveBookController(
 //        return ResponseEntity.ok(updatedRow)
 }
 
-interface BookReactiveRepository : JpaRepository<Book, Long>, KotlinJdslJpqlExecutor
+interface BookRepository : JpaRepository<Book, Long>, KotlinJdslJpqlExecutor
 
 @Service
 class ReactiveBookService(
     private val sessionFactory: SessionFactory,
-//    private val queryFactory: SpringDataHibernateMutinyReactiveQueryFactory,
     private val entityManager: EntityManager,
-    private val bookReactiveRepository: BookReactiveRepository,
+    private val bookRepository: BookRepository,
 ) {
+    private val context = JpqlRenderContext()
     suspend fun create(spec: CreateBookSpec): Book {
         return Book(name = spec.name, meta = spec.meta).also {
             sessionFactory.withSession { session -> session.persist(it).flatMap { session.flush() } }
