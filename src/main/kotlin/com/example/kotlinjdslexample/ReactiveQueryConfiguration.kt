@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import java.util.Properties
 
+import jakarta.persistence.Persistence
+import org.hibernate.reactive.stage.Stage
+
 @Configuration
 class ReactiveQueryConfiguration {
     @Bean
@@ -56,3 +59,22 @@ class ReactiveQueryConfiguration {
 //        )
 //    }
 }
+//object SessionFactoryTestUtils {
+//    fun getMutinySessionFactory(): Mutiny.SessionFactory {
+//        return entityManagerFactory.unwrap(Mutiny.SessionFactory::class.java)
+//    }
+//
+//    fun getStageSessionFactory(): Stage.SessionFactory {
+//        return entityManagerFactory.unwrap(Stage.SessionFactory::class.java)
+//    }
+//}
+//
+//private val entityManagerFactory = Persistence.createEntityManagerFactory("example").also {
+//    val thread = Thread {
+//        if (it.isOpen) it.close()
+//
+//        println("EntityManagerFactory is closed")
+//    }
+//
+//    Runtime.getRuntime().addShutdownHook(thread)
+//}
