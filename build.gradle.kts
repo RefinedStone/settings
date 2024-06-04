@@ -22,8 +22,8 @@ dependencies {
 
     // just add these dependencies for use kotlin-jdsl
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    val jdslVersion = "2.2.1.RELEASE"
-    implementation("com.linecorp.kotlin-jdsl:spring-data-kotlin-jdsl-starter-jakarta:$jdslVersion")
+//    val jdslVersion = "2.2.1.RELEASE"
+//    implementation("com.linecorp.kotlin-jdsl:spring-data-kotlin-jdsl-starter-jakarta:$jdslVersion")
 
     // coroutine
     val coroutineVersion = "1.6.4"
@@ -67,6 +67,7 @@ dependencies {
     implementation("com.linecorp.kotlin-jdsl:jpql-dsl:3.4.1")
     implementation("com.linecorp.kotlin-jdsl:jpql-render:3.4.1")
     implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:3.4.1")
+    implementation("com.linecorp.kotlin-jdsl:hibernate-reactive-support:3.4.1")
     //
     noArg {
         annotation("com.linecorp.kotlinjdsl.example.hibernate.reactive.jakarta.jpql.entity.annotation.CompositeId")

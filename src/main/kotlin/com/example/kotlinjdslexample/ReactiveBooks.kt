@@ -1,9 +1,11 @@
 package com.example.kotlinjdslexample
 
+import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension
 import com.example.kotlinjdslexample.entity.Book // ktlint-disable import-ordering
 import com.linecorp.kotlinjdsl.dsl.jpql.jpql
 import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderContext
 import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderer
+import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createQuery
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.SpringDataHibernateMutinyReactiveQueryFactory
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.deleteQuery
@@ -13,6 +15,7 @@ import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpql
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.updateQuery
 import io.smallrye.mutiny.coroutines.awaitSuspending
 import jakarta.persistence.EntityManager
+import org.hibernate.reactive.mutiny.Mutiny
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.http.ResponseEntity
@@ -99,6 +102,7 @@ class ReactiveBookService(
             sessionFactory.withSession { session -> session.persist(it).flatMap { session.flush() } }
                 .awaitSuspending()
         }
+
     }
 
     suspend fun temp(): MutableList<Book>? {
@@ -127,14 +131,11 @@ class ReactiveBookService(
             select(entity(Book::class))
                 .from(entity(Book::class))
         }
-        val context = JpqlRenderContext()
-        val renderer = JpqlRenderer()
-        val rendered = renderer.render(query, context)
 
         val actual = sessionFactory.withSession { session ->
-            session.createQuery(rendered.query, Book::class.java)
-                .resultList
+            session.createQuery(query, context).resultList
         }.awaitSuspending()
+
         return actual
     }
 //    suspend fun findById(id: Long): Book {
