@@ -1,30 +1,25 @@
 package com.example.kotlinjdslexample
 
-import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension
-import com.example.kotlinjdslexample.entity.Book // ktlint-disable import-ordering
-import com.linecorp.kotlinjdsl.dsl.jpql.jpql
-import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderContext
-import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderer
-import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createQuery
-import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
+
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.SpringDataHibernateMutinyReactiveQueryFactory
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.deleteQuery
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.listQuery
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.pageQuery
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.singleQuery
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.updateQuery
+import com.example.kotlinjdslexample.entity.Book
+import com.linecorp.kotlinjdsl.dsl.jpql.jpql
+import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderContext
+import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderer
+import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createQuery
+import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
 import io.smallrye.mutiny.coroutines.awaitSuspending
 import jakarta.persistence.EntityManager
-import org.hibernate.reactive.mutiny.Mutiny
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/books/reactive")
