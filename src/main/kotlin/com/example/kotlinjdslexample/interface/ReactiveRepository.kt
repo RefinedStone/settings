@@ -5,6 +5,9 @@ import io.smallrye.mutiny.Uni
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import org.hibernate.reactive.mutiny.Mutiny
+import org.springframework.context.annotation.Bean
+import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import java.lang.reflect.ParameterizedType
 
 interface ReactiveRepository<T, ID> {
@@ -58,5 +61,7 @@ abstract class AbstractReactiveRepository<T, ID> : ReactiveRepository<T, ID> {
         }
     }
 }
+
 @ApplicationScoped
-class BookRepository : AbstractReactiveRepository<Book, Long>()
+@Repository
+class BookReactiveRepository : AbstractReactiveRepository<Book, Long>()

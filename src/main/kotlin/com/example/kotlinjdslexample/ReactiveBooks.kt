@@ -8,6 +8,7 @@ package com.example.kotlinjdslexample
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.singleQuery
 // import com.linecorp.kotlinjdsl.spring.data.reactive.query.updateQuery
 import com.example.kotlinjdslexample.entity.Book
+import com.example.kotlinjdslexample.`interface`.BookReactiveRepository
 import com.linecorp.kotlinjdsl.dsl.jpql.jpql
 import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderContext
 import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderer
@@ -37,6 +38,17 @@ class ReactiveBookController(
         val book = bookService.findAll()
         return ResponseEntity.ok(book)
     }
+    @GetMapping("/all/v2")
+    suspend fun findByAllV2(): ResponseEntity<List<Book>> {
+        val book = bookService.findAllWithBlockingAndSpringData()
+        return ResponseEntity.ok(book)
+    }
+    @GetMapping("/all/v3")
+    suspend fun findByAllV3(): ResponseEntity<List<Book>> {
+        val book = bookService.findAllWithNoneBlockingWithReactiveRepository()
+        return ResponseEntity.ok(book)
+    }
+
 //    @GetMapping("/{bookId}")
 //    suspend fun findById(@PathVariable bookId: Long): ResponseEntity<Book> {
 //        val book = bookService.findById(bookId)
@@ -90,6 +102,7 @@ class ReactiveBookService(
     private val sessionFactory: SessionFactory,
     private val entityManager: EntityManager,
     private val bookRepository: BookRepository,
+    private val bookReactiveRepository: BookReactiveRepository
 ) {
     private val context = JpqlRenderContext()
     suspend fun create(spec: CreateBookSpec): Book {
@@ -98,6 +111,10 @@ class ReactiveBookService(
                 .awaitSuspending()
         }
 
+    }
+
+    suspend fun findAllWithNoneBlockingWithReactiveRepository(): List<Book> {
+        return bookReactiveRepository.findAll().awaitSuspending()
     }
 
     suspend fun temp(): MutableList<Book>? {
@@ -116,12 +133,15 @@ class ReactiveBookService(
         return actual
     }
 
+    suspend fun findAllWithBlockingAndSpringData(): List<Book> {
+        val rs: List<Book?> = bookRepository.findAll() {
+            select(entity(Book::class))
+                .from(entity(Book::class))
+        }
+        return rs.mapNotNull { it }
+    }
+
     suspend fun findAll(): List<Book> {
-//        val rs: List<Book?> = bookReactiveRepository.findAll() {
-//            select(entity(Book::class))
-//                .from(entity(Book::class))
-//        }
-//        return rs.mapNotNull { it }
         val query = jpql {
             select(entity(Book::class))
                 .from(entity(Book::class))

@@ -37,6 +37,12 @@ content-type: application/json
 ### find all
 GET {{base}}/all
 
+### find all v2
+GET {{base}}/all/v2
+
+### find all v3
+GET {{base}}/all/v3
+
 ### find by name
 GET {{base}}?name=Of%20The%20Ring
 
